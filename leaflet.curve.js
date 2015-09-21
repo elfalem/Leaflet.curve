@@ -4,7 +4,6 @@
  */
 /*
  * note that SVG (x, y) corresponds to (long, lat)
- * for arcs rx and ry are treated as rlong and rlat respectively with their units being degrees
  */
 
 L.Curve = L.Path.extend({
@@ -48,9 +47,6 @@ L.Curve = L.Path.extend({
 			}else if(lastCommand == 'V'){
 				bound.extend([coord[0], lastPoint.lng]);
 				lastPoint = new L.latLng(coord[0], lastPoint.lng);
-			}else if(lastCommand == 'A'){
-				bound.extend([coord[5], coord[6]]);
-				lastPoint = new L.latLng(coord[5], coord[6]);
 			}else if(lastCommand == 'C'){
 				var controlPoint1 = new L.latLng(coord[0], coord[1]);
 				coord = this._coords[++i];
@@ -157,18 +153,6 @@ L.Curve = L.Path.extend({
 							lastCoord = [coord[0], lastCoord[1]];
 						}
 					break;
-					case 7:
-						curPoint = this._map.latLngToLayerPoint([coord[5], coord[6]]);
-						curPoint.rotation = coord[2];
-						curPoint.large = coord[3];
-						curPoint.sweep = coord[4];
-						//TODO: convert to meters
-						var orig = this._map.latLngToLayerPoint([0, 0]);
-						var q = this._map.latLngToLayerPoint([coord[1], coord[0]]);
-						curPoint.rx = Math.abs(q.x - orig.x);
-						curPoint.ry = Math.abs(q.y - orig.y);
-						lastCoord = [coord[5], coord[6]];
-					break;
 				}
 				this._points.push(curPoint);
 			}
@@ -193,11 +177,6 @@ L.SVG.include({
 				str += curCommand;
 			}else{
 				switch(curCommand){
-					case 'A':
-						str += point.rx + ',' + point.ry + ' ' + point.rotation + ' ' 
-							+ point.large + ',' + point.sweep + ' ' 
-							+ point.x + ',' + point.y + ' ';
-						break;
 					case 'H':
 						str += point.x + ' ';
 						break;
