@@ -37,7 +37,7 @@ L.Curve = L.Path.extend({
 		var bound = new L.LatLngBounds();
 		var lastPoint;
 		var lastCommand;
-		vat coord;
+		var coord;
 		for(var i = 0; i < this._coords.length; i++){
 			coord = this._coords[i];
 			if(typeof coord == 'string' || coord instanceof String){
