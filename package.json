@@ -1,0 +1,25 @@
+{
+  "name": "leaflet-curve",
+  "version": "1.0.0",
+  "description": "A Leaflet plugin for drawing Bézier curves and other complex shapes.",
+  "main": "leaflet.curve.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onikiienko/Leaflet.curve.git"
+  },
+  "keywords": [
+    "leaflet",
+    "Bezier",
+    "curve",
+    "SVG"
+  ],
+  "author": "onikiienko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onikiienko/Leaflet.curve/issues"
+  },
+  "homepage": "https://github.com/onikiienko/Leaflet.curve#readme"
+}
