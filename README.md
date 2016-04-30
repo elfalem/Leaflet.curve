@@ -19,7 +19,7 @@ var path = L.curve(['M',[50.54136296522163,28.520507812500004],
 					{color:'red',fill:true}).addTo(map);
 ```
 ### Requirements
-* This plugin is based on Leaflet version 1.0-beta 2.
+* This plugin is based on Leaflet version 1.0-rc1.
 * Currently, only SVG rendering is supported.
 * Browser and device compatibility testing is very limited.
 
