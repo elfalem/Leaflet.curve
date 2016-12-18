@@ -23,7 +23,7 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a 
 var pathOne = L.curve(['M',[50.14874640066278,14.106445312500002],
 					   'Q',[51.67255514839676,16.303710937500004],
 						   [50.14874640066278,18.676757812500004],
-					   'T',[49.866316729538674,25.0927734375]]).addTo(map);
+					   'T',[49.866316729538674,25.0927734375]], {animate: 3000}).addTo(map);
 
 //cubic bezier curve (and straight lines)
 var pathTwo = L.curve(['M',[50.54136296522163,28.520507812500004],
@@ -52,6 +52,10 @@ var pathThree = L.curve(['M',[49.35375571830993,6.240234375],
 							 [48.45835188280866,5.800781250000001],
 							 [48.8936153614802,5.493164062500001],'Z'], {fill:true, color:'orange'}).addTo(map);
 
+var pathFour = L.curve(['M',[46.86019101567027,-29.047851562500004],
+					   'Q',[50.48547354578499,-23.818359375000004],
+						   [46.70973594407157,-19.907226562500004],
+					   'T',[46.6795944656402,-11.0302734375]], {dashArray: 5, animate: {duration: 3000, iterations: Infinity}}).addTo(map);
 
 function onMapClick(e) {
     console.log(e.latlng);

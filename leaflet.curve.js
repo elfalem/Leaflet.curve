@@ -168,7 +168,21 @@ L.curve = function (path, options){
 L.SVG.include({
 	_updatecurve: function(layer){
 		this._setPath(layer, this._curvePointsToPath(layer._points));
-    	},
+		
+		if(layer.options.animate){
+			var path = layer._path;
+			var length = path.getTotalLength();
+			
+			if(!layer.options.dashArray){
+				path.style.strokeDasharray = length + ' ' + length;
+			}
+			path.animate([
+					{strokeDashoffset: length},
+					{strokeDashoffset: 0}
+				], layer.options.animate);
+		}
+	},
+	
  	_curvePointsToPath: function(points){
 		var point, curCommand, str = '';
 		for(var i = 0; i < points.length; i++){
