@@ -12,6 +12,7 @@ L.Curve = L.Path.extend({
 	
 	initialize: function(path, options){
 		L.setOptions(this, options);
+		this._initialUpdate = true;
 		this._setPath(path);
 	},
 	
@@ -168,7 +169,7 @@ L.curve = function (path, options){
 L.SVG.include({
 	_updatecurve: function(layer){
 		this._setPath(layer, this._curvePointsToPath(layer._points));
-		
+
 		if(layer.options.animate){
 			var path = layer._path;
 			var length = path.getTotalLength();
@@ -176,10 +177,14 @@ L.SVG.include({
 			if(!layer.options.dashArray){
 				path.style.strokeDasharray = length + ' ' + length;
 			}
-			path.animate([
-					{strokeDashoffset: length},
-					{strokeDashoffset: 0}
-				], layer.options.animate);
+			
+			if(layer._initialUpdate){
+				path.animate([
+						{strokeDashoffset: length},
+						{strokeDashoffset: 0}
+					], layer.options.animate);
+				layer._initialUpdate = false;
+			}
 		}
 	},
 	
