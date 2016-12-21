@@ -40,13 +40,20 @@ The first argument to L.curve() is an array of path data. This is composed of co
 
 Note that only absolute commands (uppercase) are implemented. It's possible to approximate elliptical arcs (command 'A') with Bézier curves (the `elliptical-arc` branch implements this command if you're interested).
 
-The `L.Curve` class extends `L.Path` so options, events, and methods inherited from `L.Path` are available. The follow new option is introduced by `L.Curve`.
+The `L.Curve` class extends `L.Path` so options, events, and methods inherited from `L.Path` are available. The following new option and methods are introduced by `L.Curve`.
 
 **Options**
 
 |Option|Type|Default|Description|
 |------|----|-------|-----------|
-|animate|Integer or animate options object|undefined|Animates the curve. It takes a parameter which is the same one provided to the `options` parameter of [Element.animate()](https://developer.mozilla.org/en-US/docs/Web/API/Element/animate) method. Note: Web Animations API support [varies](http://caniuse.com/#feat=web-animation) across browsers.|
+|animate|Integer or animate options object|`undefined`|Animates the curve. It takes a parameter which is the same one provided to the `options` parameter of [Element.animate()](https://developer.mozilla.org/en-US/docs/Web/API/Element/animate) method. Note: Web Animations API support [varies](http://caniuse.com/#feat=web-animation) across browsers.|
+
+
+**Methods**
+|Method|Returns|Description|
+|------|-------|-----------|
+|setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and cooridinates.|
+|getPath()|`pathData[]`|Returns array of the commands and coordinates in the path.|
 
 ### License
 MIT
