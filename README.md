@@ -50,6 +50,7 @@ The `L.Curve` class extends `L.Path` so options, events, and methods inherited f
 
 
 **Methods**
+
 |Method|Returns|Description|
 |------|-------|-----------|
 |setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and cooridinates.|
