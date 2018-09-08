@@ -61,6 +61,12 @@ function onMapClick(e) {
     console.log(e.latlng);
 }
 map.on('click', onMapClick);
+
+var pathOneAnim = pathOne.getAnimation();
 </script>
+
+<button type="button" onclick="javascript:pathOneAnim.play()">Play</button>
+<button type="button" onclick="javascript:pathOneAnim.pause()">Pause</button>
+<button type="button" onclick="javascript:pathOneAnim.reverse()">Reverse</button>
 </body>
 </html>

@@ -13,6 +13,7 @@ L.Curve = L.Path.extend({
 	initialize: function(path, options){
 		L.setOptions(this, options);
 		this._initialUpdate = true;
+		this._animationObject = null;
 		this._setPath(path);
 	},
 	
@@ -23,6 +24,11 @@ L.Curve = L.Path.extend({
 	setPath: function(path){
 		this._setPath(path);
 		return this.redraw();
+	},
+	
+	//TODO: https://developer.mozilla.org/en-US/docs/Web/API/Document/getAnimations migh might allow the same thing, still convenience?
+	getAnimation: function(){
+		return this._animationObject;
 	},
 	
 	getBounds: function() {
@@ -170,6 +176,7 @@ L.SVG.include({
 	_updatecurve: function(layer){
 		this._setPath(layer, this._curvePointsToPath(layer._points));
 
+		//TODO: animation starts half way, suspecting that initial key frame is becomes wrong
 		if(layer.options.animate){
 			var path = layer._path;
 			var length = path.getTotalLength();
@@ -179,7 +186,7 @@ L.SVG.include({
 			}
 			
 			if(layer._initialUpdate){
-				path.animate([
+				layer._animationObject = path.animate([
 						{strokeDashoffset: length},
 						{strokeDashoffset: 0}
 					], layer.options.animate);
