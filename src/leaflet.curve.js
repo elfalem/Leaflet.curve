@@ -115,7 +115,6 @@ L.Curve = L.Path.extend({
 		return bound;
 	},
 	
-	//TODO: use a centroid algorithm instead
 	getCenter: function () {
 		return this._bounds.getCenter();
 	},
