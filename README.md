@@ -2,11 +2,23 @@
 A [Leaflet](http://leafletjs.com) plugin for drawing Bézier curves and other complex shapes. ([DEMO](http://elfalem.github.io/Leaflet.curve/))
 
 ### Usage
-Include the plugin after Leaflet:
+If using directly, include the plugin after Leaflet:
 ```
 <script src="leaflet.js"></script>
 <script src="leaflet.curve.js"></script>
 ```
+
+If using Node.js, install and import:
+
+```
+yarn add @elfalem/leaflet-curve
+```
+
+```
+import L from 'leaflet'
+import '@elfalem/leaflet-curve'
+```
+
 Add a path that includes a Bézier curve and straight lines:
 ```
 var path = L.curve(['M',[50.54136296522163,28.520507812500004],
