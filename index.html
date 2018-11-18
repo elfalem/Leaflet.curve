@@ -55,7 +55,7 @@ var pathThree = L.curve(['M',[49.35375571830993,6.240234375],
 var pathFour = L.curve(['M',[46.86019101567027,-29.047851562500004],
 					   'Q',[50.48547354578499,-23.818359375000004],
 						   [46.70973594407157,-19.907226562500004],
-					   'T',[46.6795944656402,-11.0302734375]], {dashArray: 5, animate: {duration: 3000, iterations: Infinity}}).addTo(map);
+					   'T',[46.6795944656402,-11.0302734375]], {dashArray: '5', animate: {duration: 3000, iterations: Infinity}}).addTo(map);
 
 function onMapClick(e) {
     console.log(e.latlng);

@@ -32,7 +32,7 @@ var path = L.curve(['M',[50.54136296522163,28.520507812500004],
 ```
 ### Requirements
 * This plugin is based on Leaflet version 1.0.0.
-* Currently, only SVG rendering is supported.
+* SVG rendering is best supported. Basic Canvas rendering is possible but animations won't work.
 * Browser and device compatibility testing is very limited.
 
 ### API

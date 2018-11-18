@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add CHANGELOG file.
+- Basic support for Canvas rendering.
 
 ### Changed
 - Update usage instructions in README.

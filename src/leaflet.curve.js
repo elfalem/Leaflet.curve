@@ -158,36 +158,9 @@ L.Curve = L.Path.extend({
 				this._points.push(curPoint);
 			}
 		}
-	}	
-});
-
-L.curve = function (path, options){
-	return new L.Curve(path, options);
-};
-
-L.SVG.include({
-	_updatecurve: function(layer){
-		this._setPath(layer, this._curvePointsToPath(layer._points));
-
-		if(layer.options.animate){
-			var path = layer._path;
-			var length = path.getTotalLength();
-			
-			if(!layer.options.dashArray){
-				path.style.strokeDasharray = length + ' ' + length;
-			}
-			
-			if(layer._initialUpdate){
-				path.animate([
-						{strokeDashoffset: length},
-						{strokeDashoffset: 0}
-					], layer.options.animate);
-				layer._initialUpdate = false;
-			}
-		}
 	},
-	
- 	_curvePointsToPath: function(points){
+
+	_curvePointsToPath: function(points){
 		var point, curCommand, str = '';
 		for(var i = 0; i < points.length; i++){
 			point = points[i];
@@ -209,5 +182,67 @@ L.SVG.include({
 			}
 		}
 		return str || 'M0 0';
+	},
+
+	// Needed by the `Canvas` renderer for interactivity
+	_containsPoint: function(layerPoint) {
+		return this._bounds.contains(this._map.layerPointToLatLng(layerPoint));
+	}
+});
+
+L.curve = function (path, options){
+	return new L.Curve(path, options);
+};
+
+L.SVG.include({
+	_updatecurve: function(layer){
+		this._setPath(layer, layer._curvePointsToPath(layer._points));
+
+		if(layer.options.animate){
+			var path = layer._path;
+			var length = path.getTotalLength();
+			
+			if(!layer.options.dashArray){
+				path.style.strokeDasharray = length + ' ' + length;
+			}
+			
+			if(layer._initialUpdate){
+				path.animate([
+						{strokeDashoffset: length},
+						{strokeDashoffset: 0}
+					], layer.options.animate);
+				layer._initialUpdate = false;
+			}
+		}
+	}
+});
+
+L.Canvas.include({
+	_updatecurve: function(layer){
+		var path2d = new Path2D(layer._curvePointsToPath(layer._points));
+		this._curveFillStroke(path2d, this._ctx, layer);
+	},
+
+	// similar to Canvas._fillStroke(ctx, layer)
+	_curveFillStroke: function (path2d, ctx, layer) {
+		var options = layer.options;
+
+		if (options.fill) {
+			ctx.globalAlpha = options.fillOpacity;
+			ctx.fillStyle = options.fillColor || options.color;
+			ctx.fill(path2d, options.fillRule || 'evenodd');
+		}
+
+		if (options.stroke && options.weight !== 0) {
+			if (ctx.setLineDash) {
+				ctx.setLineDash(layer.options && layer.options._dashArray || []);
+			}
+			ctx.globalAlpha = options.opacity;
+			ctx.lineWidth = options.weight;
+			ctx.strokeStyle = options.color;
+			ctx.lineCap = options.lineCap;
+			ctx.lineJoin = options.lineJoin;
+			ctx.stroke(path2d);
+		}
 	}
 });
