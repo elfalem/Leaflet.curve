@@ -8,6 +8,8 @@ If using directly, include the plugin after Leaflet:
 <script src="leaflet.curve.js"></script>
 ```
 
+(If rendering using canvas AND using animations, include [tween.js](https://github.com/tweenjs/tween.js) as well.)
+
 If using Node.js, install and import:
 
 ```
@@ -30,9 +32,9 @@ var path = L.curve(['M',[50.54136296522163,28.520507812500004],
 						[48.40003249610685,28.564453125000004],'Z'],
 					{color:'red',fill:true}).addTo(map);
 ```
-### Requirements
-* This plugin is based on Leaflet version 1.0.0.
-* SVG rendering is best supported. Basic Canvas rendering is possible but animations won't work.
+### Notes
+* This plugin is based on Leaflet version 1.1.0.
+* SVG rendering is best supported. Canvas rendering is also possible.
 * Browser and device compatibility testing is very limited.
 
 ### API

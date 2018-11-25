@@ -1,6 +1,10 @@
 The MIT License (MIT)
 
-Copyright (c) 2015 elfalem
+Copyright (c) 2015-2018 elfalem
+
+This software includes portions of Leaflet.Canvas-Flowmap-Layer 
+(https://github.com/jwasilgeo/Leaflet.Canvas-Flowmap-Layer) for canvas
+rendering : Copyright (c) 2017 Jacob Wasilkowski
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

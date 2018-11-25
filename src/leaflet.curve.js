@@ -1,6 +1,6 @@
 /*
- * Leaflet.curve v0.1.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
- * (c) elfalem 2015
+ * Leaflet.curve v0.3.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * (c) elfalem 2015-2018
  */
 /*
  * note that SVG (x, y) corresponds to (long, lat)
@@ -12,7 +12,6 @@ L.Curve = L.Path.extend({
 	
 	initialize: function(path, options){
 		L.setOptions(this, options);
-		this._initialUpdate = true;
 		this._setPath(path);
 	},
 	
@@ -126,14 +125,18 @@ L.Curve = L.Path.extend({
 	},
 	
 	_updatePath: function() {
-		this._renderer._updatecurve(this);
+		if(this._usingCanvas){
+			this._updateCurveCanvas();
+		}else{
+			this._updateCurveSvg();
+		}
 	},
 
 	_project: function() {
 		var coord, lastCoord, curCommand, curPoint;
 
 		this._points = [];
-		
+
 		for(var i = 0; i < this._coords.length; i++){
 			coord = this._coords[i];
 			if(typeof coord == 'string' || coord instanceof String){
@@ -142,15 +145,15 @@ L.Curve = L.Path.extend({
 			}else {
 				switch(coord.length){
 					case 2:
-						curPoint = this._map.latLngToLayerPoint(coord);
+						curPoint = this._latLngToPointFn.call(this._map, coord);
 						lastCoord = coord;
 					break;
 					case 1:
 						if(curCommand == 'H'){
-							curPoint = this._map.latLngToLayerPoint([lastCoord[0], coord[0]]);
+							curPoint = this._latLngToPointFn.call(this._map, [lastCoord[0], coord[0]]);
 							lastCoord = [lastCoord[0], coord[0]];
 						}else{
-							curPoint = this._map.latLngToLayerPoint([coord[0], lastCoord[1]]);
+							curPoint = this._latLngToPointFn.call(this._map, [coord[0], lastCoord[1]]);
 							lastCoord = [coord[0], lastCoord[1]];
 						}
 					break;
@@ -184,48 +187,185 @@ L.Curve = L.Path.extend({
 		return str || 'M0 0';
 	},
 
+	beforeAdd: function(map){
+		L.Path.prototype.beforeAdd.call(this, map);
+
+		this._usingCanvas = this._renderer instanceof L.Canvas;
+
+		this._latLngToPointFn = this._usingCanvas ? map.latLngToContainerPoint : map.latLngToLayerPoint;
+		if(this._usingCanvas){
+			this._pathSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');			
+		}
+	},
+
+	onAdd: function(map){
+		L.Path.prototype.onAdd.call(this, map);
+
+		if(this._usingCanvas){
+			this._animationCanvasElement = this._insertCustomCanvasElement();
+
+			this._resizeCanvas();
+
+			map.on('resize', this._resizeCanvas, this);
+
+			if(this.options.animate && window.TWEEN){
+				this._pathLength = this._pathSvgElement.getTotalLength();
+				
+				if(!this.options.dashArray){
+					this.options.dashArray = this._pathLength + '';
+					this._renderer._updateDashArray(this);
+				}
+
+				this._normalizeCanvasAnimationOptions();
+
+				this._tweenedObject = {offset: this._pathLength};
+				this._tween = new TWEEN.Tween(this._tweenedObject)
+					.to({offset: 0}, this.options.animate.duration)
+					// difference of behavior with SVG, delay occurs on every iteration
+					.delay(this.options.animate.delay)
+					.repeat(this.options.animate.iterations - 1)
+					.onComplete(function(scope){
+						return function(){
+							scope._canvasAnimating = false;
+						}
+					}(this))
+					.start();
+
+				this._canvasAnimating = true;
+				this._animateCanvas();
+			}else{
+				this._canvasAnimating = false;
+			}
+		}else{
+			if(this.options.animate){
+				var path = this._path;
+				var length = path.getTotalLength();
+				
+				if(!this.options.dashArray){
+					path.style.strokeDasharray = length + ' ' + length;
+				}
+				
+				path.animate([
+					{strokeDashoffset: length},
+					{strokeDashoffset: 0}
+				], this.options.animate);
+			}
+		}
+	},
+
+	onRemove: function(map){
+		L.Path.prototype.onRemove.call(this, map);
+
+		if(this._usingCanvas){
+			this._clearCanvas();
+			L.DomUtil.remove(this._animationCanvasElement);
+			map.off('resize', this._resizeCanvas, this);
+		}
+	},
+
+	// SVG specific logic
+	_updateCurveSvg: function(){
+		this._renderer._setPath(this, this._curvePointsToPath(this._points));
+	},
+
 	// Needed by the `Canvas` renderer for interactivity
 	_containsPoint: function(layerPoint) {
 		return this._bounds.contains(this._map.layerPointToLatLng(layerPoint));
-	}
-});
+	},
 
-L.curve = function (path, options){
-	return new L.Curve(path, options);
-};
+	// Canvas specific logic below here
+	_insertCustomCanvasElement: function(){
+		var element = L.DomUtil.create('canvas', 'leaflet-zoom-animated');
+		var originProp = L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
+		element.style[originProp] = '50% 50%';
+		var pane = this._map.getPane(this.options.pane);
+		pane.insertBefore(element, pane.firstChild);
 
-L.SVG.include({
-	_updatecurve: function(layer){
-		this._setPath(layer, layer._curvePointsToPath(layer._points));
+		return element;
+	},
 
-		if(layer.options.animate){
-			var path = layer._path;
-			var length = path.getTotalLength();
-			
-			if(!layer.options.dashArray){
-				path.style.strokeDasharray = length + ' ' + length;
+	_normalizeCanvasAnimationOptions: function(){
+		var opts = {
+			delay: 0,
+			duration: 0,
+			iterations:	1
+		};
+		if(typeof(this.options.animate) == "number"){
+			opts.duration = this.options.animate;
+		}else{
+			if(this.options.animate.duration){
+				opts.duration = this.options.animate.duration;
 			}
-			
-			if(layer._initialUpdate){
-				path.animate([
-						{strokeDashoffset: length},
-						{strokeDashoffset: 0}
-					], layer.options.animate);
-				layer._initialUpdate = false;
+			if(this.options.animate.delay){
+				opts.delay =this.options.animate.delay;
+			}
+			if(this.options.animate.iterations){
+				opts.iterations = this.options.animate.iterations;
 			}
 		}
-	}
-});
 
-L.Canvas.include({
-	_updatecurve: function(layer){
-		var path2d = new Path2D(layer._curvePointsToPath(layer._points));
-		this._curveFillStroke(path2d, this._ctx, layer);
+		this.options.animate = opts;
+	},
+
+	_updateCurveCanvas: function(){
+		this._project();
+
+		var pathString = this._curvePointsToPath(this._points);
+		this._pathSvgElement.setAttribute('d', pathString);
+		
+		this._path2d = new Path2D(pathString);
+
+		if(this._animationCanvasElement){
+			this._resetCanvas();
+		}
+	},
+
+	_animationCanvasElement: null,
+
+	_resizeCanvas: function() {
+		var size = this._map.getSize();
+		this._animationCanvasElement.width = size.x;
+		this._animationCanvasElement.height = size.y;
+
+		this._resetCanvas();
+	},
+
+	_resetCanvas: function() {
+		var topLeft = this._map.containerPointToLayerPoint([0, 0]);
+		L.DomUtil.setPosition(this._animationCanvasElement, topLeft);
+
+		this._redrawCanvas();
+	},
+
+	_redrawCanvas: function(){
+		if(!this._canvasAnimating){
+			this._clearCanvas();
+			var ctx = this._animationCanvasElement.getContext('2d');
+			this._curveFillStroke(this._path2d, ctx);
+		}
+	},
+
+	_clearCanvas: function() {
+		this._animationCanvasElement.getContext('2d').clearRect(0, 0, this._animationCanvasElement.width, this._animationCanvasElement.height);
+	},
+  
+	_animateCanvas: function(time){
+		TWEEN.update(time);
+	
+		var ctx = this._animationCanvasElement.getContext('2d');
+		ctx.clearRect(0, 0, this._animationCanvasElement.width, this._animationCanvasElement.height);
+		ctx.lineDashOffset = this._tweenedObject.offset;
+
+		this._curveFillStroke(this._path2d, ctx);
+
+		if(this._canvasAnimating){
+			this._animationFrameId = L.Util.requestAnimFrame(this._animateCanvas, this);
+		}
 	},
 
 	// similar to Canvas._fillStroke(ctx, layer)
-	_curveFillStroke: function (path2d, ctx, layer) {
-		var options = layer.options;
+	_curveFillStroke: function (path2d, ctx) {
+		var options = this.options;
 
 		if (options.fill) {
 			ctx.globalAlpha = options.fillOpacity;
@@ -235,7 +375,7 @@ L.Canvas.include({
 
 		if (options.stroke && options.weight !== 0) {
 			if (ctx.setLineDash) {
-				ctx.setLineDash(layer.options && layer.options._dashArray || []);
+				ctx.setLineDash(this.options && this.options._dashArray || []);
 			}
 			ctx.globalAlpha = options.opacity;
 			ctx.lineWidth = options.weight;
@@ -246,3 +386,7 @@ L.Canvas.include({
 		}
 	}
 });
+
+L.curve = function (path, options){
+	return new L.Curve(path, options);
+};

@@ -11,12 +11,13 @@
 <div id="map"></div>
 
 
-<script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script> -->
 <script src="src/leaflet.curve.js"></script>
 
 <script>
 //set up map
-var map = L.map('map').setView([46.05, 11.05], 5);
+var map = L.map('map'/*, {preferCanvas: true}*/).setView([46.05, 11.05], 5);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
 //quadratic bezier curve
@@ -52,15 +53,28 @@ var pathThree = L.curve(['M',[49.35375571830993,6.240234375],
 							 [48.45835188280866,5.800781250000001],
 							 [48.8936153614802,5.493164062500001],'Z'], {fill:true, color:'orange'}).addTo(map);
 
+pathThree.on('click', function(e){
+	console.log("path three clicked");
+});
+
 var pathFour = L.curve(['M',[46.86019101567027,-29.047851562500004],
 					   'Q',[50.48547354578499,-23.818359375000004],
 						   [46.70973594407157,-19.907226562500004],
 					   'T',[46.6795944656402,-11.0302734375]], {dashArray: '5', animate: {duration: 3000, iterations: Infinity}}).addTo(map);
+
+var pathFive = L.curve(['M',
+[42.45588764197166, -20.126953125000004],
+[50.48547354578499, -23.774414062500004],
+[47.96050238891509, -15.644531250000002],
+'Z'], {color: 'red', fill: true, dashArray: '5', animate: {duration: 3000, iterations: Infinity, delay: 1000}});
 
 function onMapClick(e) {
     console.log(e.latlng);
 }
 map.on('click', onMapClick);
 </script>
+
+<button onclick="pathFive.addTo(map)">Add</button>
+<button onclick="pathFive.remove()">Remove</button>
 </body>
 </html>
