@@ -208,7 +208,7 @@ L.Curve = L.Path.extend({
 
 			map.on('resize', this._resizeCanvas, this);
 
-			if(this.options.animate && window.TWEEN){
+			if(this.options.animate && typeof(TWEEN) === 'object'){
 				this._pathLength = this._pathSvgElement.getTotalLength();
 				
 				if(!this.options.dashArray){
