@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2019-02-27
+### Fixed
+- Fix animated curve becoming dashed when zoomed #19
+
 ## [0.4.0] - 2019-02-02
 ### Added
 - Support for Canvas animations.
@@ -27,7 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Ability to draw Bézier curves.
 
-[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/elfalem/Leaflet.curve/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.1.0...v0.2.0

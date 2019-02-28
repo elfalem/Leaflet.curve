@@ -1,5 +1,5 @@
 /*
- * Leaflet.curve v0.4.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * Leaflet.curve v0.4.1 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
  * (c) elfalem 2015-2019
  */
 /*
@@ -199,7 +199,12 @@ L.Curve = L.Path.extend({
 	},
 
 	onAdd: function(map){
-		L.Path.prototype.onAdd.call(this, map);
+		if(this._usingCanvas){
+			// determine if dash array is set by user
+			this._canvasSetDashArray = !this.options.dashArray;
+		}
+		
+		L.Path.prototype.onAdd.call(this, map); // calls _update()
 
 		if(this._usingCanvas){
 			this._animationCanvasElement = this._insertCustomCanvasElement();
@@ -210,11 +215,6 @@ L.Curve = L.Path.extend({
 
 			if(this.options.animate && typeof(TWEEN) === 'object'){
 				this._pathLength = this._pathSvgElement.getTotalLength();
-				
-				if(!this.options.dashArray){
-					this.options.dashArray = this._pathLength + '';
-					this._renderer._updateDashArray(this);
-				}
 
 				this._normalizeCanvasAnimationOptions();
 
@@ -238,14 +238,9 @@ L.Curve = L.Path.extend({
 			}
 		}else{
 			if(this.options.animate){
-				var path = this._path;
-				var length = path.getTotalLength();
+				var length = this._svgSetDashArray();
 				
-				if(!this.options.dashArray){
-					path.style.strokeDasharray = length + ' ' + length;
-				}
-				
-				path.animate([
+				this._path.animate([
 					{strokeDashoffset: length},
 					{strokeDashoffset: 0}
 				], this.options.animate);
@@ -266,6 +261,20 @@ L.Curve = L.Path.extend({
 	// SVG specific logic
 	_updateCurveSvg: function(){
 		this._renderer._setPath(this, this._curvePointsToPath(this._points));
+
+		if(this.options.animate){			
+			this._svgSetDashArray();
+		}
+	},
+
+	_svgSetDashArray: function(){
+		var path = this._path;
+		var length = path.getTotalLength();
+		
+		if(!this.options.dashArray){
+			path.style.strokeDasharray = length + ' ' + length;
+		}
+		return length;
 	},
 
 	// Needed by the `Canvas` renderer for interactivity
@@ -313,11 +322,19 @@ L.Curve = L.Path.extend({
 		var pathString = this._curvePointsToPath(this._points);
 		this._pathSvgElement.setAttribute('d', pathString);
 		
+		if(this.options.animate && typeof(TWEEN) === 'object' && this._canvasSetDashArray){
+			this._pathLength = this._pathSvgElement.getTotalLength();
+			this.options.dashArray = this._pathLength + '';
+			this._renderer._updateDashArray(this);
+		}
+
 		this._path2d = new Path2D(pathString);
 
 		if(this._animationCanvasElement){
 			this._resetCanvas();
 		}
+
+		
 	},
 
 	_animationCanvasElement: null,
