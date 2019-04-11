@@ -401,6 +401,116 @@ L.Curve = L.Path.extend({
 			ctx.lineJoin = options.lineJoin;
 			ctx.stroke(path2d);
 		}
+	},
+
+	// path tracing logic below here
+	trace: function(t){
+		t = t.filter(function(element){
+			return element >= 0 && element <= 1;
+		});
+
+		var point, curCommand, curStartPoint, curEndPoint;
+		var p1, p2, p3;
+		var samples = [];
+		for(var i = 0; i < this._points.length; i++){
+			point = this._points[i];
+			if(typeof point == 'string' || point instanceof String){
+				curCommand = point;
+
+				if(curCommand == 'Z'){
+					samples = samples.concat(this._linearTrace(t, curEndPoint, curStartPoint));
+				}
+			}else{
+				switch(curCommand){
+					case 'M':
+						curStartPoint = point;
+						curEndPoint = point;
+						break;
+					case 'L':
+					case 'H':
+					case 'V':
+						samples = samples.concat(this._linearTrace(t, curEndPoint, point));
+
+						curEndPoint = point;
+						break;
+					case 'C':
+						p1 = point;
+						p2 = this._points[++i];
+						p3 = this._points[++i];
+						samples = samples.concat(this._cubicTrace(t, curEndPoint, p1, p2, p3));
+
+						curEndPoint = p3;
+						break;
+					case 'S':
+						p1 = this._reflectPoint(p2, curEndPoint);
+						p2 = point;
+						p3 = this._points[++i];
+						samples = samples.concat(this._cubicTrace(t, curEndPoint, p1, p2, p3));
+
+						curEndPoint = p3;
+						break;
+					case 'Q':
+						p1 = point;
+						p2 = this._points[++i];
+						samples = samples.concat(this._quadraticTrace(t, curEndPoint, p1, p2));
+
+						curEndPoint = p2;
+						break;
+					case 'T':
+						p1 = this._reflectPoint(p1, curEndPoint);
+						p2 = point;
+						samples = samples.concat(this._quadraticTrace(t, curEndPoint, p1, p2));
+
+						curEndPoint = p2;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		return samples;
+	},
+	_linearTrace: function(t, p0, p1){
+		return t.map(interval => {
+			var x = this._singleLinearTrace(interval, p0.x, p1.x);
+			var y = this._singleLinearTrace(interval, p0.y, p1.y);
+			return this._map.layerPointToLatLng([x, y]);
+		});
+	},
+	_quadraticTrace: function(t, p0, p1, p2){
+		return t.map(interval => {
+			var x = this._singleQuadraticTrace(interval, p0.x, p1.x, p2.x);
+			var y = this._singleQuadraticTrace(interval, p0.y, p1.y, p2.y);
+			return this._map.layerPointToLatLng([x, y]);
+		});
+	},
+	_cubicTrace: function(t, p0, p1, p2, p3){
+		return t.map(interval => {
+			var x = this._singleCubicTrace(interval, p0.x, p1.x, p2.x, p3.x);
+			var y = this._singleCubicTrace(interval, p0.y, p1.y, p2.y, p3.y);
+			return this._map.layerPointToLatLng([x, y]);
+		});
+	},
+	_singleLinearTrace: function(t, p0, p1){
+		return p0 + t * (p1 - p0);
+	},
+	_singleQuadraticTrace: function(t, p0, p1, p2){
+		var oneMinusT = 1 - t;
+		return Math.pow(oneMinusT, 2) * p0 +
+		2 * oneMinusT * t * p1 +
+		Math.pow(t, 2) * p2;
+	},
+	_singleCubicTrace: function(t, p0, p1, p2, p3){
+		var oneMinusT = 1 - t;
+		return Math.pow(oneMinusT, 3) * p0 +
+		3 * Math.pow(oneMinusT, 2) * t * p1 +
+		3 * oneMinusT * Math.pow(t, 2) * p2 +
+		Math.pow(t, 3) * p3;
+	},
+	_reflectPoint: function(point, over){
+		x = over.x + (over.x - point.x);
+		y = over.y + (over.y - point.y);
+		return L.point(x, y);
 	}
 });
 
