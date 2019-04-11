@@ -67,7 +67,7 @@ The `L.Curve` class extends `L.Path` so options, events, and methods inherited f
 
 |Method|Returns|Description|
 |------|-------|-----------|
-|setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and cooridinates.|
+|setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and coordinates.|
 |getPath()|`pathData[]`|Returns array of the commands and coordinates in the path.|
 
 ### License
