@@ -237,7 +237,7 @@ L.Curve = L.Path.extend({
 				this._canvasAnimating = false;
 			}
 		}else{
-			if(this.options.animate){
+			if(this.options.animate && this._path.animate){
 				var length = this._svgSetDashArray();
 				
 				this._path.animate([
