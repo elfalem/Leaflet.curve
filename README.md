@@ -1,5 +1,5 @@
 # Leaflet.curve
-A [Leaflet](http://leafletjs.com) plugin for drawing Bézier curves and other complex shapes. ([DEMO](http://elfalem.github.io/Leaflet.curve/))
+A [Leaflet](http://leafletjs.com) plugin for drawing Bézier curves and other complex shapes. ([DEMO])
 
 ### Usage
 If using directly, include the plugin after Leaflet:
@@ -69,9 +69,12 @@ The `L.Curve` class extends `L.Path` so options, events, and methods inherited f
 |------|-------|-----------|
 |setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and coordinates.|
 |getPath()|`pathData[]`|Returns array of the commands and coordinates in the path.|
+|trace(`samplingDistance[]`)|`latLng[]`|Returns array of points that lie on the curve at the given distances. Sampling distance is a decimal value between 0 and 1 inclusive and is applied to each segment (i.e. command) of the curve. See [DEMO] for example.|
 
 ### License
 MIT
 
 ### Contributions
 * Bug reports and pull requests are welcome!
+
+[DEMO]: http://elfalem.github.io/Leaflet.curve/

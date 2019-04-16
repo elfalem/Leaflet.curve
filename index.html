@@ -72,9 +72,17 @@ function onMapClick(e) {
     console.log(e.latlng);
 }
 map.on('click', onMapClick);
+
+function traceCurves(){
+	pathOne.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
+	pathTwo.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
+	pathThree.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
+	pathFour.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
+}
 </script>
 
 <button onclick="pathFive.addTo(map)">Add</button>
 <button onclick="pathFive.remove()">Remove</button>
+<button onclick="traceCurves()">Trace curves</button>
 </body>
 </html>
