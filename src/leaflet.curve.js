@@ -1,5 +1,5 @@
 /*
- * Leaflet.curve v0.5.1 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * Leaflet.curve v0.5.2 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
  * (c) elfalem 2015-2019
  */
 /*
