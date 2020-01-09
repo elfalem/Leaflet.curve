@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2020-01-08
+### Added
+- Add methods for greater compatibility with other libraries and base Leaflet methods #25
+- Bump mixin-deep from 1.3.1 to 1.3.2 #27
+
 ## [0.5.2] - 2019-04-30
 ### Fixed
 - Second attempt to fix outdated npm package issue #23
@@ -44,7 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Ability to draw Bézier curves.
 
-[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.4.1...v0.5.0

@@ -1,6 +1,6 @@
 /*
- * Leaflet.curve v0.5.2 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
- * (c) elfalem 2015-2019
+ * Leaflet.curve v0.6.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * (c) elfalem 2015-2020
  */
 /*
  * note that SVG (x, y) corresponds to (long, lat)
