@@ -6,6 +6,8 @@
  * note that SVG (x, y) corresponds to (long, lat)
  */
 
+import { debug } from "util";
+
 L.Curve = L.Path.extend({
 	options: {
 	},
@@ -36,9 +38,9 @@ L.Curve = L.Path.extend({
 	_computeBounds: function(){
 		var bound = new L.LatLngBounds();
 		var lastPoint;
-		var lastCommand;
+    var lastCommand;
 		for(var i = 0; i < this._coords.length; i++){
-			coord = this._coords[i];
+      let coord = this._coords[i];
 			if(typeof coord == 'string' || coord instanceof String){
 				lastCommand = coord;
 			}else if(lastCommand == 'H'){
@@ -56,7 +58,7 @@ L.Curve = L.Path.extend({
 
 				bound.extend(controlPoint1);
 				bound.extend(controlPoint2);
-				bound.extend(endPoint);
+        bound.extend(endPoint);
 
 				endPoint.controlPoint1 = controlPoint1;
 				endPoint.controlPoint2 = controlPoint2;
@@ -66,8 +68,8 @@ L.Curve = L.Path.extend({
 				coord = this._coords[++i];
 				var endPoint = new L.latLng(coord[0], coord[1]);
 
-				var controlPoint1 = lastPoint;
-				if(lastPoint.controlPoint2){
+        var controlPoint1 = lastPoint;
+				if(lastPoint && lastPoint.controlPoint2){
 					var diffLat = lastPoint.lat - lastPoint.controlPoint2.lat;
 					var diffLng = lastPoint.lng - lastPoint.controlPoint2.lng;
 					controlPoint1 = new L.latLng(lastPoint.lat + diffLat, lastPoint.lng + diffLng);
