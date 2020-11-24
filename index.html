@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8">
 <title>Leaflet.curve plugin demo</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
 <style>
 #map { height: 500px; }
 </style>
@@ -12,19 +12,25 @@
 
 
 <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
 <script src="src/leaflet.curve.js"></script>
 
 <script>
 //set up map
-var map = L.map('map'/*, {preferCanvas: true}*/).setView([46.05, 11.05], 5);
+var map = L.map('map').setView([46.05, 11.05], 5);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+//use a mix of renderers
+var customPane = map.createPane("customPane");
+var canvasRenderer = L.canvas({pane:"customPane"});
+customPane.style.zIndex = 399; // put just behind the standard overlay pane which is at 400
 
 //quadratic bezier curve
 var pathOne = L.curve(['M',[50.14874640066278,14.106445312500002],
 					   'Q',[51.67255514839676,16.303710937500004],
 						   [50.14874640066278,18.676757812500004],
-					   'T',[49.866316729538674,25.0927734375]], {animate: 3000}).addTo(map);
+					   'T',[49.866316729538674,25.0927734375]], {animate: 3000, renderer: canvasRenderer}).addTo(map);
+
 
 //cubic bezier curve (and straight lines)
 var pathTwo = L.curve(['M',[50.54136296522163,28.520507812500004],
@@ -37,8 +43,7 @@ var pathTwo = L.curve(['M',[50.54136296522163,28.520507812500004],
 					   'M',[49.55372551347579,29.465332031250004],
 					   'V',[48.7822260446217],
 					   'H',[33.00292968750001],
-					   'V',[49.55372551347579],'Z'],{color:'red',fill:true}).addTo(map);
-
+					   'V',[49.55372551347579],'Z'],{color:'red',fill:true, renderer: canvasRenderer }).addTo(map);
 
 
 var pathThree = L.curve(['M',[49.35375571830993,6.240234375],
@@ -68,10 +73,9 @@ var pathFive = L.curve(['M',
 [47.96050238891509, -15.644531250000002],
 'Z'], {color: 'red', fill: true, dashArray: '5', animate: {duration: 3000, iterations: Infinity, delay: 1000}});
 
-function onMapClick(e) {
+map.on('click', function(e) {
     console.log(e.latlng);
-}
-map.on('click', onMapClick);
+});
 
 function traceCurves(){
 	pathOne.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
