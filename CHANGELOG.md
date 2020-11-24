@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2020-11-24
+### Fixed
+- Use supplied pane when rendering curves for canvas #33
+- Handle case of tracing curve not added to map #22
+- Fix package vulnerabilities #28, #31
+
 ## [0.6.0] - 2020-01-08
 ### Added
 - Add methods for greater compatibility with other libraries and base Leaflet methods #25
@@ -49,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Ability to draw Bézier curves.
 
-[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/elfalem/Leaflet.curve/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/elfalem/Leaflet.curve/compare/v0.5.0...v0.5.1
