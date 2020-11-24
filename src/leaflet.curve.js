@@ -366,6 +366,12 @@ L.Curve = L.Path.extend({
 
 	// path tracing logic below here
 	trace: function(t){
+		// initially map is undefined, but then null if curve was added and removed
+		if(this._map === undefined || this._map === null)
+		{
+			return [];
+		}
+
 		t = t.filter(function(element){
 			return element >= 0 && element <= 1;
 		});

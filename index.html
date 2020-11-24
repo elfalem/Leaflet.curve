@@ -68,7 +68,7 @@ var pathFour = L.curve(['M',[46.86019101567027,-29.047851562500004],
 					   'T',[46.6795944656402,-11.0302734375]], {dashArray: '5', animate: {duration: 3000, iterations: Infinity}}).addTo(map);
 
 var pathFive = L.curve(['M',
-[42.45588764197166, -20.126953125000004],
+[42.45588764197166, -20.126953125000004],'L',
 [50.48547354578499, -23.774414062500004],
 [47.96050238891509, -15.644531250000002],
 'Z'], {color: 'red', fill: true, dashArray: '5', animate: {duration: 3000, iterations: Infinity, delay: 1000}});
@@ -82,6 +82,7 @@ function traceCurves(){
 	pathTwo.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
 	pathThree.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
 	pathFour.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
+	pathFive.trace([0, 0.25, 0.75, 1]).forEach(i => L.circle(i, {color: 'green'}).addTo(map));
 }
 </script>
 
