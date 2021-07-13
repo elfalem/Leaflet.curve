@@ -17,7 +17,7 @@ yarn add @elfalem/leaflet-curve
 ```
 
 ```
-import L from 'leaflet'
+import L from 'leaflet'  // import { curve, Curve } from 'leaflet'; // for TypeScript
 import '@elfalem/leaflet-curve'
 ```
 
