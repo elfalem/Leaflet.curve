@@ -33,6 +33,7 @@ declare module "leaflet" {
         // Public functions
         setPath(pathData: CurvePathData): this;
         getPath(): CurvePathData;
+        getLatLngs(): CurvePathData;
         setLatLngs(pathData: CurvePathData): this;
         trace(samplingDistance: number[]): LatLng[];
     }

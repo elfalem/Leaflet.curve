@@ -70,6 +70,7 @@ The `L.Curve` class extends `L.Path` so options, events, and methods inherited f
 |setPath(`pathData[]`)|`this`|Replaces the current path with the given array of commands and coordinates.|
 |getPath()|`pathData[]`|Returns array of the commands and coordinates in the path.|
 |setLatLngs(`pathData[]`)|`this`|Alias to method this.setPath(`pathData[]`) using the naming convention of L.Polyline and other Leaflet components.|
+|getLatLngs()|`pathData[]	`|Alias to method this.getPath() using the naming convention of L.Polyline and other Leaflet components.|
 |trace(`samplingDistance[]`)|`latLng[]`|Returns array of points that lie on the curve at the given distances. Sampling distance is a decimal value between 0 and 1 inclusive and is applied to each segment (i.e. command) of the curve. See [DEMO] for example.|
 
 ### License
