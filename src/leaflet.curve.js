@@ -20,18 +20,19 @@ L.Curve = L.Path.extend({
 	setLatLngs: function(path) {
 		return this.setPath(path);
 	},
-
+	getLatLngs: this.getPath,
+	
 	_updateBounds: function() {
 		var tolerance = this._clickTolerance();
 		var tolerancePoint = new L.Point(tolerance, tolerance);
-
+		
 		//_pxBounds is critical for canvas renderer, used to determine area that needs redrawing
 		this._pxBounds = new L.Bounds([
 			this._rawPxBounds.min.subtract(tolerancePoint),
 			this._rawPxBounds.max.add(tolerancePoint)
 		]);
 	},
-
+	
 	getPath: function(){
 		return this._coords;
 	},
