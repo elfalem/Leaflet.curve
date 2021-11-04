@@ -1,6 +1,6 @@
 {
   "name": "@elfalem/leaflet-curve",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A Leaflet plugin for drawing Bézier curves and other complex shapes.",
   "main": "dist/leaflet.curve.js",
   "types": "types/leaflet.curve.d.ts",

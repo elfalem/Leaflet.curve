@@ -1,5 +1,5 @@
 /*
- * Leaflet.curve v0.8.1 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * Leaflet.curve v0.9.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
  * (c) elfalem 2015-2021
  */
 /*
@@ -20,7 +20,10 @@ L.Curve = L.Path.extend({
 	setLatLngs: function(path) {
 		return this.setPath(path);
 	},
-	getLatLngs: this.getPath,
+
+	getLatLngs: function() {
+		return this.getPath();
+	},
 	
 	_updateBounds: function() {
 		var tolerance = this._clickTolerance();
