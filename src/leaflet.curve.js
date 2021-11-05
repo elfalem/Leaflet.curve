@@ -293,6 +293,7 @@ L.Curve = L.Path.extend({
 
 	// Needed by the `Canvas` renderer for interactivity
 	_containsPoint: function(layerPoint) {
+		if (!this._bounds.isValid()) return false;
 		return this._bounds.contains(this._map.layerPointToLatLng(layerPoint));
 	},
 
