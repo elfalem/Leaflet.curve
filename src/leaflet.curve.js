@@ -1,5 +1,5 @@
 /*
- * Leaflet.curve v0.9.0 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
+ * Leaflet.curve v0.9.1 - a plugin for Leaflet mapping library. https://github.com/elfalem/Leaflet.curve
  * (c) elfalem 2015-2021
  */
 /*
@@ -293,7 +293,9 @@ L.Curve = L.Path.extend({
 
 	// Needed by the `Canvas` renderer for interactivity
 	_containsPoint: function(layerPoint) {
-		if (!this._bounds.isValid()) return false;
+		if (!this._bounds.isValid()) {
+			return false;
+		}
 		return this._bounds.contains(this._map.layerPointToLatLng(layerPoint));
 	},
 
