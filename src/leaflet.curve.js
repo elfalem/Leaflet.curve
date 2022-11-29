@@ -263,9 +263,29 @@ L.Curve = L.Path.extend({
 		}else{
 			if(this.options.animate && this._path.animate){
 				var length = this._svgSetDashArray();
-
+				
+				//jcm10 contribution: avoiding animation hiccups
+				//calibrating display length to the total length of the dash array pattern
+				var dasharray_str=this.options.dashArray
+				if(dasharray_str.includes(" ")) {
+					var delim=" "
+				} else if (dasharray_str.includes(",")) {
+					var delim=" "
+				} else {var delim=""};
+				
+				var dasharray_ints=dasharray_str.split(delim);
+				
+				total_dasharray_len=0
+				dasharray_ints.forEach(i=>total_dasharray_len+=parseInt(i))
+				
+				var remainder=length % (total_dasharray_len)
+				
+				var calibrated_length=length-remainder;
+				
+				this._path.pathLength.baseVal=calibrated_length;
+				
 				this._path.animate([
-					{strokeDashoffset: length},
+					{strokeDashoffset: calibrated_length},
 					{strokeDashoffset: 0}
 				], this.options.animate);
 			}
