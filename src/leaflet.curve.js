@@ -262,12 +262,9 @@ L.Curve = L.Path.extend({
 			}
 		}else{
 			if(this.options.animate && this._path.animate){
-				var length = this._svgSetDashArray();
-
-				this._path.animate([
-					{strokeDashoffset: length},
-					{strokeDashoffset: 0}
-				], this.options.animate);
+                var length = Math.min(this._svgSetDashArray(), 1000);
+                this._path.pathLength.baseVal = length;
+                this._path.animate([{ strokeDashoffset: length }, { strokeDashoffset: 0 }], this.options.animate);
 			}
 		}
 	},
