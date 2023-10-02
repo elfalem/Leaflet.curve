@@ -263,7 +263,8 @@ L.Curve = L.Path.extend({
 		}else{
 			if(this.options.animate && this._path.animate){
                 var length = Math.min(this._svgSetDashArray(), 1000);
-                                if(dasharray_str.includes(" ")) {
+                var dasharray_str=this.options.dashArray
+				if(dasharray_str.includes(" ")) {
 					var delim=" "
 				} else if (dasharray_str.includes(",")) {
 					var delim=" "
