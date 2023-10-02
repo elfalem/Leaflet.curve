@@ -1,19 +1,32 @@
 {
   "name": "@johnconnor_mulligan/leaflet.curve",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Fork of elfalem's leaflet.curve",
-  "main": "webpack.config.js",
+  "main": "dist/leaflet.curve.js",
+  "types": "types/leaflet.curve.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
+  "files": [
+    "dist/leaflet.curve.js",
+    "types/leaflet.curve.d.ts"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JohnMulligan/Leaflet.curve.git"
+    "url": "git+https://github.com/johnmulligan/Leaflet.curve.git"
   },
-  "author": "",
+  "author": "elfalem",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/JohnMulligan/Leaflet.curve/issues"
+  "homepage": "https://github.com/elfalem/Leaflet.curve#readme",
+  "devDependencies": {
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.1.4"
   },
-  "homepage": "https://github.com/JohnMulligan/Leaflet.curve#readme"
+  "peerDependencies": {
+    "leaflet": "^1.1.0"
+  },
+  "optionalDependencies": {
+    "@tweenjs/tween.js": "^17.2.0"
+  },
+  "dependencies": {}
 }
