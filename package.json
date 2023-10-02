@@ -1,6 +1,6 @@
 {
   "name": "@johnconnor_mulligan/leaflet.curve",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Fork of elfalem's leaflet.curve",
   "main": "webpack.config.js",
   "scripts": {
