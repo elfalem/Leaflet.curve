@@ -263,8 +263,34 @@ L.Curve = L.Path.extend({
 		}else{
 			if(this.options.animate && this._path.animate){
                 var length = Math.min(this._svgSetDashArray(), 1000);
-                this._path.pathLength.baseVal = length;
-                this._path.animate([{ strokeDashoffset: length }, { strokeDashoffset: 0 }], this.options.animate);
+                                if(dasharray_str.includes(" ")) {
+					var delim=" "
+				} else if (dasharray_str.includes(",")) {
+					var delim=" "
+				} else {var delim=""};
+				var dasharray_ints=dasharray_str.split(delim);
+				total_dasharray_len=0
+				dasharray_ints.forEach(i=>total_dasharray_len+=parseInt(i))
+				var remainder=length % (total_dasharray_len)
+				var calibrated_length=length-remainder;
+				var calibrated_dasharray_str=(dasharray_str+' ').repeat(calibrated_length/total_dasharray_len)
+				calibrated_dasharray_str=calibrated_dasharray_str.substring(0,calibrated_dasharray_str.length-1)
+				if (calibrated_dasharray_str !=''){
+					var strokedashoffset=total_dasharray_len
+				}else{
+					var strokedashoffset=10
+				}
+				
+				this._path.pathLength.baseVal=calibrated_length;
+				this._path.animate([
+					{strokeDashoffset: strokedashoffset},
+					{strokeDashoffset: 0}
+				], this.options.animate);
+				
+				if (calibrated_dasharray_str !=''){
+					this.options.dashArray=calibrated_dasharray_str
+					
+				}
 			}
 		}
 	},
