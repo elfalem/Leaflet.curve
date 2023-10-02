@@ -262,15 +262,23 @@ L.Curve = L.Path.extend({
 			}
 		}else{
 			if(this.options.animate && this._path.animate){
-                var length = Math.min(this._svgSetDashArray(), 1000);
-                var dasharray_str=this.options.dashArray
-				if(dasharray_str.includes(" ")) {
+                var length = Math.min(this._svgSetDashArray(),1000)
+                var dasharray=this.options.dashArray
+                console.log(length,Array.isArray(dasharray))
+                
+                if (Array.isArray(dasharray)) {
+                	var dasharray_ints=dasharray
+                	var dasharray_str=dasharray.join(" ")
+                } else {
+                	var dasharray_str=dasharray
+                	if(dasharray.includes(" ")) {
 					var delim=" "
-				} else if (dasharray_str.includes(",")) {
-					var delim=" "
-				} else {var delim=""};
-				var dasharray_ints=dasharray_str.split(delim);
-				total_dasharray_len=0
+					} else if (dasharray.includes(",")) {
+						var delim=" "
+					} else {var delim=""};
+					var dasharray_ints=dasharray.split(delim);
+                }
+				var total_dasharray_len=0
 				dasharray_ints.forEach(i=>total_dasharray_len+=parseInt(i))
 				var remainder=length % (total_dasharray_len)
 				var calibrated_length=length-remainder;
